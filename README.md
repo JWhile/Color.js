@@ -41,7 +41,6 @@ Convert input color to `rgb`, `hex`, `int` or `array`
 
 ```js
 // Create a Color instance :
-
 var c = new Color("#ffffff");
 // or like this
 var c = Color("#ffffff");
@@ -61,57 +60,45 @@ c.toArray(); // return [255, 255, 255, 255]
 
 ### Reference
 
-- c.r
-_int8_
-Red value
+*	c.`r`
+	> Red value
 (0 to 255)
 
-- c.g
-_int8_
-Green value
+*	c.`g`
+	> Green value
 (0 to 255)
 
-- c.b
-_int8_
-Blue value
+*	c.`b`
+	> Blue value
 (0 to 255)
 
-- c.a
-_int8_
-Alpha value
+*	c.`a`
+	> Alpha value
 (0 to 255)
 
-- c.toInt()
-_u_int32_
-Color as an int
+*	c.`toInt()`
+	> Color as an int
 
-- c.toHex()
-_string_
-Color as a CSS hex color
+*	c.`toHex()`
+	> Color as a CSS hex color string
 (`#FFFFFF` or `#FFFFFFFF` with alpha)
 
-- c.toRgb()
-_string_
-Color as a CSS rgb (or rgba) color
+*	c.`toRgb()`
+	> Color as a CSS rgb (or rgba) color string
 (`rgb(255, 255, 255)` or `rgba(255, 255, 255, 1)` with alpha)
 
-- c.toArray()
-_array[4]_
-Color values in an array
+*	c.`toArray()`
+	> Color values in an array
 (`[255, 255, 255, 255]`)
 
-- Color.int(input)
-_u_int32_
-Convert any color to int color
+*	Color.`int(input)`
+	> Convert any color to int color
 
-- Color.hex(input)
-_string_
-Convert any color to CSS hex color
+*	Color.`hex(input)`
+	> Convert any color to CSS hex color string
 
-- Color.rgb(input)
-_string_
-Convert any color to CSS rgb color
+*	Color.`rgb(input)`
+	> Convert any color to CSS rgb color string
 
-- Color.array(input)
-_string_
-Convert any color to array of color values
+*	Color.`array(input)`
+	> Convert any color to array of color values
