@@ -160,7 +160,9 @@ Color.prototype.format = function(pattern)
 		case "rgb":
 			return self.toRgb();
 		case "int":
-			return self.toInt() + "";
+			return "0x"+ ("0" + ((self.a << 24) + (self.r << 16) + (self.g << 8) + self.b).toString(16)).substr((self.a < 16)? 0 : 1, 8);
+		default:
+			return match;
 		}
 	});
 };
