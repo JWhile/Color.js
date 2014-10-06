@@ -117,6 +117,45 @@ Color.prototype.toArray = function()
 {
 	return [this.r, this.g, this.b, this.a];
 };
+// output color following the pattern
+Color.prototype.format = function(pattern)
+{
+	var self = this;
+	return pattern.replace(/\{([^\}]+)\}/g, function(match, p1)
+	{
+		switch (p1)
+		{
+		case "r":
+			return self.r + "";
+		case "r_hex":
+			return ((self.r < 16)? "0" : "") + self.r.toString(16);
+
+		case "g":
+			return self.g + "";
+		case "g_hex":
+			return ((self.g < 16)? "0" : "") + self.g.toString(16);
+
+		case "b":
+			return self.b + "";
+		case "b_hex":
+			return ((self.b < 16)? "0" : "") + self.b.toString(16);
+
+		case "a":
+			return self.a / 255 + "";
+		case "a_hex":
+			return ((self.a < 16)? "0" : "") + self.a.toString(16);
+		case "a_255":
+			return self.a + "";
+
+		case "hex":
+			return self.toHex();
+		case "rgb":
+			return self.toRgb();
+		case "int":
+			return self.toInt() + "";
+		}
+	});
+};
 
 // legacy functions (but NOT deprecated)
 Color.array = function(input)
