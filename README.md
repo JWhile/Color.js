@@ -8,54 +8,56 @@ Convert input color to `rgb`, `hex`, `int` or `array`
 
 ```js
 // List of valid colors
-// All colors output white (255, 255, 255, 255)
+// All colors output blue (50, 150, 200, 255)
 [
 	// Hex
-	"#FFFFFF",
-	"#ffffff",
-	"#FFFFFFFF",
-	"#ffffffff",
+	"#3296C8",
+	"#3296c8",
+	"#3296c8ff",
+	"#3296C8FF",
 
 	// Rgb
-	"rgb(255, 255, 255)",
-	"rgba(255, 255, 255, 1)",
+	"rgb(50, 150, 200)",
+	"rgba(50, 150, 200, 1)",
+	"argb(255, 50, 150, 200)"
 
 	// Int
-	0xFFFFFFFF,
-	"0xFFFFFFFF",
+	0xFF3296C8,
+	"0xFF3296C8",
 
 	// Other
-	[255, 255, 255, 255],
-	[255, 255, 255, 1],
+	[50, 150, 200, 255],
+	[50, 150, 200, 1],
 	{
-		r: 255, // r, red, rouge, 0
-		g: 255, // g, green, v, vert, 1
-		b: 255, // b, blue, bleu, 2
+		r: 50, // r, red, rouge, 0
+		g: 150, // g, green, v, vert, 1
+		b: 200, // b, blue, bleu, 2
 		a: 255 // a, transparency, 3  // 1 == 255, 0.5 == 128
 	}
-	// Accept Color instance
 ]
+// Accept Color instance
+// Accept untrimed string
 ```
 
 ### Example
 
 ```js
 // Create a Color instance :
-var c = new Color("#ffffff");
+var c = new Color("#3296c8");
 // or like this
-var c = Color("#ffffff");
+var c = Color("#3296c8");
 
 // Color values (0 to 255)
-console.log(c.r) // 255 (red value)
-console.log(c.g) // 255 (green value)
-console.log(c.b) // 255 (blue value)
+console.log(c.r) // 50 (red value)
+console.log(c.g) // 150 (green value)
+console.log(c.b) // 200 (blue value)
 console.log(c.a) // 255 (alpha value)
 
 // Conversion methods
-c.toInt(); // return 4294967295 (0xFFFFFFFF)
-c.toHex(); // return "#ffffff"
-c.toRgb(); // return "rgb(255, 255, 255)"
-c.toArray(); // return [255, 255, 255, 255]
+c.toInt(); // return 4281505480 (0xFF3296C8)
+c.toHex(); // return "#3296C8"
+c.toRgb(); // return "rgb(50, 150, 200)"
+c.toArray(); // return [50, 150, 200, 255]
 ```
 
 ### Reference
@@ -81,15 +83,39 @@ c.toArray(); // return [255, 255, 255, 255]
 
 *	c.`toHex()`
 	> Color as a CSS hex color string
-(`#FFFFFF` or `#FFFFFFFF` with alpha)
+(`#RRGGBB` or `#RRGGBBAA` with alpha)
 
 *	c.`toRgb()`
 	> Color as a CSS rgb (or rgba) color string
-(`rgb(255, 255, 255)` or `rgba(255, 255, 255, 1)` with alpha)
+(`rgb(RRR, GGG, BBB)` or `rgba(RRR, GGG, BBB, A)` with alpha)
 
 *	c.`toArray()`
 	> Color values in an array
-(`[255, 255, 255, 255]`)
+(`[RRR, GGG, BBB, AAA]`)
+
+*	c.`format(pattern)`
+	> Return formated color following the pattern
+
+	> Pattern example
+```js
+c.format("argb({a_255}, {r}, {g}, {b})"); // Return "argb(255, 50, 150, 200)"
+
+// Pattern variables
+[
+	"{r}", // Return the 0-255 red value ("50")
+	"{r_hex}", // Return the 00-FF red value ("32")
+	"{g}", // Return the 0-255 green value ("150")
+	"{g_hex}", // Return the 00-FF green value ("96")
+	"{b}", // Return the 0-255 blue value ("200")
+	"{b_hex}", // Return the 00-FF blue value ("C8")
+	"{a}", // Return the 0-1 alpha value ("1")
+	"{a_255}", // Return the 0-255 alpha value ("255")
+	"{a_hex}", // Return the 00-FF alpha value ("FF")
+	"{hex}", // Return the c.toHex() result ("#3296c8")
+	"{rgb}", // Return the c.toRgb() result ("rgb(50, 150, 200)")
+	"{int}" // Return the int hex color representation ("0xFF3296C8")
+]
+```
 
 *	Color.`int(input)`
 	> Convert any color to int color
@@ -102,3 +128,6 @@ c.toArray(); // return [255, 255, 255, 255]
 
 *	Color.`array(input)`
 	> Convert any color to array of color values
+
+*	Color.`format(input, pattern)`
+	> Convert any color following the pattern
