@@ -1,8 +1,8 @@
 # Color.js
 
-_v2_
+_v2.1.0_
 
-Convert input color to `rgb`, `hex`, `int` or `array`
+Convert/Format any color to `rgb`, `hex`, `int` or `array`
 
 ### Accepted color
 
@@ -19,7 +19,7 @@ Convert input color to `rgb`, `hex`, `int` or `array`
 	// Rgb
 	"rgb(50, 150, 200)",
 	"rgba(50, 150, 200, 1)",
-	"argb(255, 50, 150, 200)"
+	"argb(255, 50, 150, 200)",
 
 	// Int
 	0xFF3296C8,

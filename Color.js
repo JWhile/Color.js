@@ -1,3 +1,7 @@
+/**
+ * Color.js <https://github.com/Julow/Color.js>
+ * v2.1.0
+ */
 var Color;
 
 (function(){
