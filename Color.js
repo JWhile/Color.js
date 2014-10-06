@@ -92,6 +92,14 @@ Color = function(input)
 				input = input.match(/[0-9\.]+/g);
 				continue;
 			}
+			else if (input.indexOf("argb") === 0)
+			{
+				var match = input.match(/[0-9\.]+/g);
+				this.a = match[0] || 255;
+				this.r = match[1] || 0;
+				this.g = match[2] || 0;
+				this.b = match[3] || 0;
+			}
 		}
 		input = null;
 	}
