@@ -95,27 +95,26 @@ c.toArray(); // return [50, 150, 200, 255]
 
 *	c.`format(pattern)`
 	> Return formated color following the pattern
-
-	> Pattern example
-```js
-c.format("argb({a_255}, {r}, {g}, {b})"); // Return "argb(255, 50, 150, 200)"
-
-// Pattern variables
-[
-	"{r}", // Return the 0-255 red value ("50")
-	"{r_hex}", // Return the 00-FF red value ("32")
-	"{g}", // Return the 0-255 green value ("150")
-	"{g_hex}", // Return the 00-FF green value ("96")
-	"{b}", // Return the 0-255 blue value ("200")
-	"{b_hex}", // Return the 00-FF blue value ("C8")
-	"{a}", // Return the 0-1 alpha value ("1")
-	"{a_255}", // Return the 0-255 alpha value ("255")
-	"{a_hex}", // Return the 00-FF alpha value ("FF")
-	"{hex}", // Return the c.toHex() result ("#3296c8")
-	"{rgb}", // Return the c.toRgb() result ("rgb(50, 150, 200)")
-	"{int}" // Return the int hex color representation ("0xFF3296C8")
-]
-```
+	> ```js
+	> // Pattern example
+	> c.format("argb({a_255}, {r}, {g}, {b})"); // Return "argb(255, 50, 150, 200)"
+	> 
+	> // Pattern variables
+	> [
+	> 	"{r}", // Return the 0-255 red value ("50")
+	> 	"{r_hex}", // Return the 00-FF red value ("32")
+	> 	"{g}", // Return the 0-255 green value ("150")
+	> 	"{g_hex}", // Return the 00-FF green value ("96")
+	> 	"{b}", // Return the 0-255 blue value ("200")
+	> 	"{b_hex}", // Return the 00-FF blue value ("C8")
+	> 	"{a}", // Return the 0-1 alpha value ("1")
+	> 	"{a_255}", // Return the 0-255 alpha value ("255")
+	> 	"{a_hex}", // Return the 00-FF alpha value ("FF")
+	> 	"{hex}", // Return the c.toHex() result ("#3296c8")
+	> 	"{rgb}", // Return the c.toRgb() result ("rgb(50, 150, 200)")
+	> 	"{int}" // Return the int hex color representation ("0xFF3296C8")
+	> ]
+	> ```
 
 *	Color.`int(input)`
 	> Convert any color to int color
