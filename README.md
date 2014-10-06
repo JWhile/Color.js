@@ -1,35 +1,117 @@
 # Color.js
 
-Parse les couleurs `rgb`, `rgba`, `array` et `hex`.
+_v2_
 
-Exemple de couleur: `#000`, `rgba(255, 255, 255, 0.5)`, `rgb(90, 90, 90)`, `#FFAA00FF`, `#557700`.
+Convert input color to `rgb`, `hex`, `int` or `array`
 
-### Exemple
+### Accepted color
 
 ```js
-var color = new Color('#FFAA00FF');
+// List of valid colors
+// All colors output white (255, 255, 255, 255)
+[
+	// Hex
+	"#FFFFFF",
+	"#ffffff",
+	"#FFFFFFFF",
+	"#ffffffff",
 
-console.log(color.r);
-console.log(color.g);
-console.log(color.b);
-console.log(color.a);
+	// Rgb
+	"rgb(255, 255, 255)",
+	"rgba(255, 255, 255, 1)",
+
+	// Int
+	0xFFFFFFFF,
+	"0xFFFFFFFF",
+
+	// Other
+	[255, 255, 255, 255],
+	[255, 255, 255, 1],
+	{
+		r: 255, // r, red, rouge, 0
+		g: 255, // g, green, v, vert, 1
+		b: 255, // b, blue, bleu, 2
+		a: 255 // a, transparency, 3  // 1 == 255, 0.5 == 128
+	}
+	// Accept Color instance
+]
 ```
 
-Affiche `255`, `170`, `0` et `1`.
+### Example
 
-### Références
+```js
+// Create a Color instance :
 
-##### class Color
+var c = new Color("#ffffff");
+// or like this
+var c = Color("#ffffff");
 
-###### Fonctions
+// Color values (0 to 255)
+console.log(c.r) // 255 (red value)
+console.log(c.g) // 255 (green value)
+console.log(c.b) // 255 (blue value)
+console.log(c.a) // 255 (alpha value)
 
-* `Color.hex(color)` _(String)_ Retourne la couleur au format `hexadecimal`. Exemple: `Color.hex('rgba(255, 255, 255, 0.5)')` retourne `"#ffffff7f"`
-* `Color.rgba(color)` _(String)_ Retourne la couleur au format `rgba`. Exemple: `Color.rgba('#5a5a5a')` retourne `"rgba(90,90,90,1)"`
-* `Color.array(color)` _(String)_ Retourne la couleur au format `array`. Exemple: `Color.array('#000')` retourne `[0, 0, 0, 1]`
+// Conversion methods
+c.toInt(); // return 4294967295 (0xFFFFFFFF)
+c.toHex(); // return "#ffffff"
+c.toRgb(); // return "rgb(255, 255, 255)"
+c.toArray(); // return [255, 255, 255, 255]
+```
 
-###### Propriétés
+### Reference
 
-* `.r` _(int)_ Rouge. (0 à 255)
-* `.g` _(int)_ Vert. (0 à 255)
-* `.b` _(int)_ Bleu. (0 à 255)
-* `.a` _(float)_ Alpha (transparence). (0 à 1)
+- c.r
+_int8_
+Red value
+(0 to 255)
+
+- c.g
+_int8_
+Green value
+(0 to 255)
+
+- c.b
+_int8_
+Blue value
+(0 to 255)
+
+- c.a
+_int8_
+Alpha value
+(0 to 255)
+
+- c.toInt()
+_u_int32_
+Color as an int
+
+- c.toHex()
+_string_
+Color as a CSS hex color
+(`#FFFFFF` or `#FFFFFFFF` with alpha)
+
+- c.toRgb()
+_string_
+Color as a CSS rgb (or rgba) color
+(`rgb(255, 255, 255)` or `rgba(255, 255, 255, 1)` with alpha)
+
+- c.toArray()
+_array[4]_
+Color values in an array
+(`[255, 255, 255, 255]`)
+
+- Color.int(input)
+_u_int32_
+Convert any color to int color
+
+- Color.hex(input)
+_string_
+Convert any color to CSS hex color
+
+- Color.rgb(input)
+_string_
+Convert any color to CSS rgb color
+
+- Color.array(input)
+_string_
+Convert any color to array of color values
