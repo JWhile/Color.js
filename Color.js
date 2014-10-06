@@ -2,127 +2,141 @@ var Color;
 
 (function(){
 
-// function isNum(Number num):boolean
-var isNum = function(num)
+function getHexAt(hex, index, len)
 {
-    return (typeof num === 'number');
+	hex = hex.substr(1 + index, len);
+	return parseInt((len == 1)? hex + hex : hex, 16);
+}
+
+// string -> float
+// 0-1 -> 0-255
+// NaN -> default
+// < 0 -> default
+// float -> int
+function validInt(num, alpha)
+{
+	if (typeof num === "number")
+	{
+		if (isNaN(num) || num < 0)
+			return alpha? 255 : 0;
+		if (num <= 1 && alpha)
+			num *= 255;
+		return Math.round(num);
+	}
+	return validInt(parseFloat(num), alpha);
+}
+
+// input: int, "hex", "rgb", array, "int", object
+Color = function(input)
+{
+	if (!(this instanceof Color))
+		return new Color(input);
+
+	this.r = 0;
+	this.g = 0;
+	this.b = 0;
+	this.a = 255;
+
+	while (true)
+	{
+		if (typeof input === "object")
+		{
+			if (input == null)
+			{
+				this.r = validInt(this.r, false);
+				this.g = validInt(this.g, false);
+				this.b = validInt(this.b, false);
+				this.a = validInt(this.a, true);
+				break;
+			}
+			else if (input instanceof Array)
+			{
+				this.r = input[0];
+				this.g = input[1];
+				this.b = input[2];
+				this.a = input[3];
+			}
+			else
+			{
+				this.r = input.r || input.red || input.rouge || input["0"] || 0;
+				this.g = input.g || input.green || input.v || input.vert || input["1"] || 0;
+				this.b = input.b || input.blue || input.bleu || input["2"] || 0;
+				this.a = input.a || input.alpha || input.transparency || input["3"] || 255;
+			}
+		}
+		else if (typeof input === "number")
+		{
+			this.a = input >> 24 & 255;
+			this.r = input >> 16 & 255;
+			this.g = input >> 8 & 255;
+			this.b = input & 255;
+		}
+		else if (typeof input === "string")
+		{
+			input = input.trim();
+			if (input.indexOf("0x") === 0)
+			{
+				input = parseInt(input);
+				continue;
+			}
+			else if (input.indexOf("#") === 0)
+			{
+				var len = (input.length === 4)? 1 : 2;
+				this.r = getHexAt(input, 0, len);
+				this.g = getHexAt(input, len, len);
+				this.b = getHexAt(input, len + len, len);
+				this.a = getHexAt(input, len + len + len, len);
+			}
+			else if (input.indexOf("rgb") === 0)
+			{
+				input = input.match(/[0-9\.]+/g);
+				continue;
+			}
+		}
+		input = null;
+	}
 };
 
-// function colorToArray(String|Array|Color|Object color)
-var colorToArray = function(color)
+// output: 0xAARRGGBB (number)
+Color.prototype.toInt = function()
 {
-    var re = [0, 0, 0,  1];
-
-    if(typeof color === 'string')
-    {
-        if(color.substr(0, 3) === 'rgb')
-        {
-            re = color.match(/[0-9\.]+/gi);
-
-            for(var i = 0; i < 4; i++)
-            {
-                re[i] = parseFloat(re[i] || ((i === 3)? 1 : 0));
-            }
-        }
-        else if(color[0] === '#')
-        {
-            var len = (color.length >= 7)? 2 : 1;
-
-            var parse = function(hex)
-            {
-                return parseInt(((len === 1)? hex + hex : hex), 16);
-            };
-
-            re[0] = parse(color.substr(1, len)) || 0;
-            re[1] = parse(color.substr(1 + len, len)) || 0;
-            re[2] = parse(color.substr(1 + len + len, len)) || 0;
-            re[3] = (parse(color.substr(1 + len + len + len, len)) || 255) / 255;
-        }
-    }
-    else if(color instanceof Array)
-    {
-        for(var i = 0; i < 4; i++)
-        {
-            var n = color[i];
-
-            re[i] = isNum(n)? n : parseFloat(n);
-        }
-    }
-    else
-    {
-        re[0] = isNum(color.r)? color.r : 0;
-        re[1] = isNum(color.g)? color.g : 0;
-        re[2] = isNum(color.b)? color.b : 0;
-        re[3] = isNum(color.a)? color.a : 1;
-    }
-
-    for(var i = 0; i < 4; i++)
-    {
-        var n = re[i];
-
-        if(!isNum(n) || isNaN(n))
-        {
-            re[i] = (i === 3)? 1 : 0;
-        }
-        else if(n < 0)
-        {
-            re[i] = 0;
-        }
-        else if(n > 255 || (i === 3 && n > 1))
-        {
-            re[i] = (i === 3)? 1 : 255;
-        }
-        else if(i < 3)
-        {
-            re[i] = n | 0;
-        }
-    }
-
-    return re;
+	return (this.a << 24) + (this.r << 16) + (this.g << 8) + this.b;
+};
+// output: "#RRGGBB" or "#RRGGBBAA"
+Color.prototype.toHex = function()
+{
+	return "#" + ("0" + ((this.r << 24) + (this.g << 16) + (this.b << 8) + this.a).toString(16)).substr((this.r < 16)? 0 : 1, (this.a < 255)? 8 : 6);
+};
+// output: "rgb(RRR, GGG, BBB)" or "rgba(RRR, GGG, BBB, AAA)"
+Color.prototype.toRgb = function()
+{
+	return "rgba(" + this.r + ", " + this.g + ", " + this.b + ((this.a < 255)? ", " + (this.a / 255) + ")" : ")");
+};
+// output: [RRR, GGG, BBB, AAA] (array of 0-255 numbers)
+Color.prototype.toArray = function()
+{
+	return [this.r, this.g, this.b, this.a];
 };
 
-/**
- * class Color
- */
-Color = function(color)
+// legacy functions (but NOT deprecated)
+Color.array = function(input)
 {
-    var arr = colorToArray(color)
-
-    this.r = arr[0];
-    this.g = arr[1];
-    this.b = arr[2];
-    this.a = arr[3];
+	return Color(input).toArray();
 };
 
-// function Color.hex(String|Array|Color color)
-Color.hex = function(color)
+Color.int = function(input)
 {
-    color = colorToArray(color);
-
-    var hex = '#';
-
-    for(var i = 0; i < 3; i++)
-    {
-        hex += ('0'+ (color[i].toString(16))).slice(-2);
-    }
-
-    if(color[3] !== 1)
-    {
-        hex += ('0'+ ((color[3] * 255 | 0).toString(16))).slice(-2);
-    }
-
-    return hex;
+	return Color(input).toInt();
 };
 
-// function Color.rgb(String|Array|Color color)
-Color.rgba = function(color)
+Color.hex = function(input)
 {
-    color = colorToArray(color);
-
-    return 'rgba('+ color[0] +','+ color[1] +','+ color[2] +','+ color[3] +')';
+	return Color(input).toHex();
 };
 
-// function Color.array(String|Array|Color color)
-Color.array = colorToArray;
+Color.rgb = function(input)
+{
+	return Color(input).toRgb();
+};
 
 })();
