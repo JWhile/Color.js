@@ -170,20 +170,21 @@ Color.array = function(input)
 {
 	return Color(input).toArray();
 };
-
 Color.int = function(input)
 {
 	return Color(input).toInt();
 };
-
 Color.hex = function(input)
 {
 	return Color(input).toHex();
 };
-
 Color.rgb = function(input)
 {
 	return Color(input).toRgb();
+};
+Color.format = function(input, pattern)
+{
+	return Color(input).format(pattern);
 };
 
 })();
