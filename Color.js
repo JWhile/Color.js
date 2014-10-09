@@ -2,9 +2,7 @@
  * Color.js <https://github.com/Julow/Color.js>
  * v2.1.0
  */
-var Color;
-
-(function(){
+var Color = (function(){
 
 function getHexAt(hex, index, len)
 {
@@ -31,7 +29,7 @@ function validInt(num, alpha)
 }
 
 // input: int, "hex", "rgb", array, "int", object
-Color = function(input)
+function Color(input)
 {
 	if (!(this instanceof Color))
 		return new Color(input);
@@ -192,5 +190,7 @@ Color.format = function(input, pattern)
 {
 	return Color(input).format(pattern);
 };
+
+return Color;
 
 })();
