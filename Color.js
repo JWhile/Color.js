@@ -17,13 +17,13 @@ function hueToColor(p, q, t)
 	else if (t > 1)
 		t -= 1;
 	var c = p;
-	if (t < 0.16667)
+	if (t < 1 / 6)
 		c = (q - p) * 6 * t + p;
 	else if (t < 0.5)
 		c = q;
-	else if (t < 0.66667)
-		c = (0.66667 - t) * (q - p) * 6 + p;
-	return c * 255 | 0;
+	else if (t < 2 / 3)
+		c = (2 / 3 - t) * (q - p) * 6 + p;
+	return Math.round(c * 255);
 }
 
 function hslToRgb(h, s, l)
@@ -38,9 +38,9 @@ function hslToRgb(h, s, l)
 	s /= 100;
 	var q = (l < 0.5)? (1 + s) * l : l + s - (l * s);
 	var p = 2 * l - q;
-	return [hueToColor(p, q, h + 0.3333),
+	return [hueToColor(p, q, h + (1 / 3)),
 		hueToColor(p, q, h),
-		hueToColor(p, q, h - 0.3333)];
+		hueToColor(p, q, h - (1 / 3))];
 }
 
 function rgbToHsl(r, g, b)
@@ -68,7 +68,7 @@ function rgbToHsl(r, g, b)
 			h = ((r - g) / diff + 4) * 60;
 		s = ((l > 50)? diff / (2 - (max + min)) : diff / (max + min)) * 100;
 	}
-	return [h | 0, s | 0, l | 0];
+	return [Math.round(h), Math.round(s), Math.round(l)];
 }
 
 function HSLColor(input)
