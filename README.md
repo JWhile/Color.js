@@ -1,6 +1,6 @@
 # Color.js
 
-_v2.1.0_
+_v2.2.0_
 
 Convert/Format any color to `rgb`, `hex`, `int` or `array`
 
@@ -15,6 +15,10 @@ Convert/Format any color to `rgb`, `hex`, `int` or `array`
 	"#3296c8",
 	"#3296c8ff",
 	"#3296C8FF",
+
+	// Hsl
+	"hsl(200, 49%, 60%)"
+	"hsla(200, 49%, 60%, 1)"
 
 	// Rgb
 	"rgb(50, 150, 200)",
@@ -57,10 +61,18 @@ console.log(c.a) // 255 (alpha value)
 c.toInt(); // return 4281505480 (0xFF3296C8)
 c.toHex(); // return "#3296C8"
 c.toRgb(); // return "rgb(50, 150, 200)"
+c.toHsl(); // return "hsl(200, 49%, 60%)"
 c.toArray(); // return [50, 150, 200, 255]
+
+// HSL object
+c.toHslObject();
+// or
+var c = new Color.HSL("rgb(50, 150, 200)");
 ```
 
 ### Reference
+
+__Color object__
 
 *	c.`r`
 	> Red value
@@ -84,6 +96,10 @@ c.toArray(); // return [50, 150, 200, 255]
 *	c.`toHex()`
 	> Color as a CSS hex color string
 (`#RRGGBB` or `#RRGGBBAA` with alpha)
+
+*	c.`toHsl()`
+	> Color as a CSS hsl (or hsla) color string
+(`hsl(HHH, SS%, LL%)` or `hsla(HHH, SS%, LL%, A)` with alpha)
 
 *	c.`toRgb()`
 	> Color as a CSS rgb (or rgba) color string
@@ -110,17 +126,31 @@ c.toArray(); // return [50, 150, 200, 255]
 	> 	"{a}", // Return the 0-1 alpha value ("1")
 	> 	"{a_255}", // Return the 0-255 alpha value ("255")
 	> 	"{a_hex}", // Return the 00-FF alpha value ("FF")
+	> 	"{h}", // Return the 0-360 hue value ("200")
+	> 	"{s}", // Return the 0-100 saturation value ("49")
+	> 	"{l}", // Return the 0-100 luminosity value ("60")
 	> 	"{hex}", // Return the c.toHex() result ("#3296c8")
 	> 	"{rgb}", // Return the c.toRgb() result ("rgb(50, 150, 200)")
 	> 	"{int}" // Return the int hex color representation ("0xFF3296C8")
 	> ]
 	> ```
 
+__Color.HSL Object__
+
+Same methods as Color object.
+
+Has `h`, `s`, `l` attributes instead of `r`, `g`, `b`.
+
+__Static functions__
+
 *	Color.`int(input)`
 	> Convert any color to int color
 
 *	Color.`hex(input)`
 	> Convert any color to CSS hex color string
+
+*	Color.`hsl(input)`
+	> Convert any color to CSS hsl color string
 
 *	Color.`rgb(input)`
 	> Convert any color to CSS rgb color string
