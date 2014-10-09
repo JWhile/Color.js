@@ -10,6 +10,103 @@ function getHexAt(hex, index, len)
 	return parseInt((len == 1)? hex + hex : hex, 16);
 }
 
+function hueToColor(p, q, t)
+{
+	if (t < 0)
+		t += 1;
+	else if (t > 1)
+		t -= 1;
+	var c = p;
+	if (t < 0.16667)
+		c = (q - p) * 6 * t + p;
+	else if (r < 0.5)
+		c = q;
+	else if (t < 0.66667)
+		c = (0.66667 - t) * (q - p) * 6 + p;
+	return c * 255 | 0;
+}
+
+function hslToRgb(h, s, l)
+{
+	if (s === 0)
+	{
+		l = l * 255 | 0;
+		return [l, l, l];
+	}
+	var q = (l < 0.5)? (1 + s) * l : l + s - (l * s);
+	var p = 2 * l - q;
+	return [hueToColor(p, q, h + 0.3333),
+		hueToColor(p, q, h),
+		hueToColor(p, q, h - 0.3333)];
+}
+
+function rgbToHsl(r, g, b)
+{
+	r /= 255;
+	g /= 255;
+	b /= 255;
+	var max = Math.max(r, g, b);
+	var min = Math.min(r, g, b);
+	var h, s, l;
+	l = (max + min) * 50;
+	if (max === min)
+	{
+		h = 0;
+		s = 0;
+	}
+	else
+	{
+		var diff = max - min;
+		if (max === r)
+			h = ((g - b) / diff + ((g < b)? 6 : 0)) * 60;
+		else if (max === g)
+			h = ((b - r) / diff + 2) * 60;
+		else
+			h = ((r - g) / diff + 4) * 60;
+		s = ((l > 50)? diff / (2 - (max + min)) : diff / (max + min)) * 100;
+	}
+	return [h, s, l];
+}
+
+function HSLColor(input)
+{
+	if (!(this instanceof HSLColor))
+		return new HSLColor(input);
+
+	var rgb = new Color(input);
+	var hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+	this.h = hsl[0];
+	this.s = hsl[1];
+	this.l = hsl[2];
+	this.a = rgb.a;
+}
+HSLColor.prototype.toArray = function()
+{
+	return [this.h, this.s, this.l, this.a];
+};
+HSLColor.prototype.toInt = function()
+{
+	return Color(this).toInt();
+};
+HSLColor.prototype.toHex = function()
+{
+	return Color(this).toHex();
+};
+HSLColor.prototype.toRgb = function()
+{
+	return Color(this).toRgb();
+};
+HSLColor.prototype.toHsl = function()
+{
+	var hsl = this.h + ", " + this.s + "%, " + this.l;
+	return (this.a < 255)? "hsla(" + hsl + "%, " + this.a + ")" : "hsl(" + hsl + "%)";
+};
+HSLColor.prototype.format = function(pattern)
+{
+	return Color(this).format(pattern);
+};
+
 // string -> float
 // 0-1 -> 0-255
 // NaN -> default
@@ -57,6 +154,14 @@ function Color(input)
 				this.g = input[1];
 				this.b = input[2];
 				this.a = input[3];
+			}
+			else if (input instanceof HSLColor)
+			{
+				var rgb = hslToRgb(input.h, input.s, input.l);
+				this.r = rgb[0];
+				this.g = rgb[1];
+				this.b = rgb[2];
+				this.a = input.a;
 			}
 			else
 			{
@@ -122,6 +227,16 @@ Color.prototype.toRgb = function()
 {
 	return "rgba(" + this.r + ", " + this.g + ", " + this.b + ((this.a < 255)? ", " + (this.a / 255) + ")" : ")");
 };
+// output: "hsl(HHH, SS%, LL%)" or "hsla(HHH, SS%, LL%, A)"
+Color.prototype.toHsl = function()
+{
+	return this.toHslObject().toHsl();
+};
+// return a HSLColor object
+Color.prototype.toHslObject = function()
+{
+	return new HSLColor(this);
+};
 // output: [RRR, GGG, BBB, AAA] (array of 0-255 numbers)
 Color.prototype.toArray = function()
 {
@@ -169,6 +284,9 @@ Color.prototype.format = function(pattern)
 	});
 };
 
+// HSLColor object
+Color.HSL = HSLColor;
+
 // legacy functions (but NOT deprecated)
 Color.array = function(input)
 {
@@ -185,6 +303,10 @@ Color.hex = function(input)
 Color.rgb = function(input)
 {
 	return Color(input).toRgb();
+};
+Color.hsl = function(input)
+{
+	return HSLColor(input).toHsl();
 };
 Color.format = function(input, pattern)
 {
