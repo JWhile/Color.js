@@ -19,7 +19,7 @@ function hueToColor(p, q, t)
 	var c = p;
 	if (t < 0.16667)
 		c = (q - p) * 6 * t + p;
-	else if (r < 0.5)
+	else if (t < 0.5)
 		c = q;
 	else if (t < 0.66667)
 		c = (0.66667 - t) * (q - p) * 6 + p;
@@ -28,11 +28,14 @@ function hueToColor(p, q, t)
 
 function hslToRgb(h, s, l)
 {
+	l /= 100;
 	if (s === 0)
 	{
 		l = l * 255 | 0;
 		return [l, l, l];
 	}
+	h /= 360;
+	s /= 100;
 	var q = (l < 0.5)? (1 + s) * l : l + s - (l * s);
 	var p = 2 * l - q;
 	return [hueToColor(p, q, h + 0.3333),
@@ -65,7 +68,7 @@ function rgbToHsl(r, g, b)
 			h = ((r - g) / diff + 4) * 60;
 		s = ((l > 50)? diff / (2 - (max + min)) : diff / (max + min)) * 100;
 	}
-	return [h, s, l];
+	return [h | 0, s | 0, l | 0];
 }
 
 function HSLColor(input)
@@ -202,10 +205,10 @@ function Color(input)
 			else if (input.indexOf("argb") === 0)
 			{
 				var match = input.match(/[0-9\.]+/g);
-				this.a = match[0] || 255;
-				this.r = match[1] || 0;
-				this.g = match[2] || 0;
-				this.b = match[3] || 0;
+				this.a = match[0];
+				this.r = match[1];
+				this.g = match[2];
+				this.b = match[3];
 			}
 			else if (input.indexOf("hsl") === 0)
 			{
@@ -234,7 +237,8 @@ Color.prototype.toHex = function()
 // output: "rgb(RRR, GGG, BBB)" or "rgba(RRR, GGG, BBB, AAA)"
 Color.prototype.toRgb = function()
 {
-	return "rgba(" + this.r + ", " + this.g + ", " + this.b + ((this.a < 255)? ", " + (this.a / 255) + ")" : ")");
+	var rgb = this.r + ", " + this.g + ", " + this.b;
+	return ((this.a < 255)? "rgba(" + rgb + ", " + (this.a / 255) : "rgb(" + rgb) + ")";
 };
 // output: "hsl(HHH, SS%, LL%)" or "hsla(HHH, SS%, LL%, A)"
 Color.prototype.toHsl = function()
