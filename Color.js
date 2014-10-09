@@ -259,6 +259,7 @@ Color.prototype.toArray = function()
 Color.prototype.format = function(pattern)
 {
 	var self = this;
+	var hsl = null;
 	return pattern.replace(/\{([^\}]+)\}/g, function(match, p1)
 	{
 		switch (p1)
@@ -284,6 +285,17 @@ Color.prototype.format = function(pattern)
 			return ((self.a < 16)? "0" : "") + self.a.toString(16);
 		case "a_255":
 			return self.a + "";
+
+		case "h":
+		case "s":
+		case "l":
+			if (hsl == null)
+				hsl = self.toHslObject();
+			if (p1 === "h")
+				return hsl.h;
+			else if (p1 === "s")
+				return hsl.s;
+			return hsl.l;
 
 		case "hex":
 			return self.toHex();
