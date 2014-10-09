@@ -207,6 +207,15 @@ function Color(input)
 				this.g = match[2] || 0;
 				this.b = match[3] || 0;
 			}
+			else if (input.indexOf("hsl") === 0)
+			{
+				var match = input.match(/[0-9\.]+/g);
+				var rgb = hslToRgb(validInt(match[0]), validInt(match[1]), validInt(match[2]));
+				this.r = rgb[0];
+				this.g = rgb[1];
+				this.b = rgb[2];
+				this.a = match[3];
+			}
 		}
 		input = null;
 	}
